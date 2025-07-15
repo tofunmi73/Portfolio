@@ -76,8 +76,9 @@ export async function PUT(
     }
 
     // Update the artwork
+    const { _id, ...bodyWithoutId } = body
     const updateData = {
-      ...body,
+      ...bodyWithoutId,
       updatedAt: new Date(),
     }
 

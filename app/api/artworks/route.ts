@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       query.$or = [{ title: { $regex: search, $options: "i" } }, { tags: { $in: [new RegExp(search, "i")] } }]
     }
 
-    const artworks = await db.collection("artworks").find(query).toArray()
+    const artworks = await db.collection("artworks").find(query).sort({ createdAt: -1 }).toArray()
 
     return NextResponse.json({ success: true, data: artworks })
   } catch (error) {

@@ -65,6 +65,7 @@ export function FeaturedWorks() {
         const response = await fetch("/api/artworks/featured")
         if (response.ok) {
           const data = await response.json()
+          // console.log('API response:', data)
           setFeaturedWorks(data.data || mockFeaturedWorks)
         } else {
           setFeaturedWorks(mockFeaturedWorks)

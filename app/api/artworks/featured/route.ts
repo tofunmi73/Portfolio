@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     // Get 3 random featured artworks
     const featuredArtworks = await db
       .collection("artworks")
-      .aggregate([{ $match: { featured: true } }, { $sample: { size: 3 } }])
+      .aggregate([{ $match: { featured: true } }, { $sample: { size: 10 } }])
       .toArray()
 
     // If no featured artworks, get 3 random artworks
