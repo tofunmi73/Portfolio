@@ -33,11 +33,11 @@ export default function AboutPage() {
 
           <div className="relative">
             <div className="aspect-square relative overflow-hidden rounded-2xl shadow-2xl">
-              <Image src="https://images.saatchiart.com/saatchi/2084411/profile/inside-the-studio/7b0bee617a84eca9cb63f58cea6150c9d3215d7a-7.jpg" alt="Artist Portrait" fill className="object-cover" />
+              <Image src="https://i.imgur.com/jMvaK9e.jpeg" alt="Artist Portrait" fill className="object-cover" />
             </div>
             <div className="absolute -bottom-6 -right-6 bg-card p-4 rounded-xl shadow-lg">
               <p className="text-sm font-medium text-muted-foreground">Studio Portrait</p>
-              <p className="text-xs text-muted-foreground">Lagos, 2024</p>
+              <p className="text-xs text-muted-foreground">Lagos, 2023</p>
             </div>
           </div>
         </div>
