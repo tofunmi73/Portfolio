@@ -13,11 +13,14 @@ export default function AboutPage() {
           <div className="space-y-6">
             <h1 className="text-5xl font-bold text-foreground">About the Artist</h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Jesutofunmi translates his unique perspective into deeply evocative portraits.
-              Through meticulous layering of acrylic paint, he unveils not only the physical 
-              features of his subjects but also the rich tapestry of their inner lives—their emotions, 
-              their psychology, their humanity. Intimate compositions and vibrant color palettes draw the 
-              viewer into a contemplation of connection, vulnerability, and the shared human condition.
+              Jesutofunmi is a Lagos-based artist who explores what people hold onto for strength and meaning 
+              in life. He looks at how these guiding forces have changed over time and across different cultures. 
+              Using abstract art and stylized portraits, he creates work that sparks conversations about the 
+              different ways people find stability and purpose, encouraging both personal reflection and shared 
+              understanding. His recent series, "Hi," focuses on how quiet, introverted voices maintain their 
+              sense of self through creative work, even when they feel overlooked or unheard. His art has been 
+              shown at exhibitions including Athens Open Art, Coal City Art Exhibition, and October Rain 
+              Exhibition, among others.
             </p>
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center text-muted-foreground">
@@ -48,29 +51,22 @@ export default function AboutPage() {
             <h2 className="text-3xl font-bold mb-6 text-center">Artist Statement</h2>
             <div className="prose prose-lg max-w-none text-foreground space-y-6">
               <p>
-              I paint faces, but not the way you might expect. Working with oils and acrylics, I'm more interested in 
-              what lies beneath the surface—the thoughts we carry, the connections we make, the quiet moments when we're most ourselves.
+              My art explores how people find things to hold onto in life, looking at how these guiding forces 
+              have changed over time and across different cultures. The unspoken questions we face about what 
+              truly grounds us amidst life's constant flux, directly fuel the conceptual core of my work.
               </p>
               <p>
-              Each painting starts with something I can't quite put into words. Maybe it's a feeling from a conversation, 
-              or the way someone looked when they thought no one was watching. I begin with spiral patterns that become 
-              the foundation, then slowly build layers of paint until something true emerges.
+              I translate these themes onto canvas using abstraction and abstracted portraiture, often 
+              incorporating intricate patterns with intentional exaggeration to draw the viewer deeply into the 
+              conversation. Through this visual language, I aim to open a dialogue about the diverse forms and 
+              historical shifts of these vital anchors, inviting personal contemplation and collective 
+              understanding. 
               </p>
               <p>
-              What draws me most are those in-between spaces—the pause before we speak, the moment when our guard comes down, 
-              the split second when we really see each other. My portraits aren't trying to capture perfect likenesses. Instead, 
-              they're asking: what does it feel like to be human? What do we share when everything else is stripped away?
-              </p>
-              <p>
-              The spirals that appear in my work aren't just technique—they're about how we move through life, circling back to 
-              the same questions, the same hopes, never quite arriving but always reaching.
-              When you look at my paintings, I want you to see something familiar. Not necessarily the face itself, 
-              but the feeling behind it. The way we all carry similar fears and dreams, even when we think we're completely alone.
-
-              </p>
-              <p>
-              I paint because I believe there's something we all recognize in each other, something that connects us despite our differences. 
-              My work is my way of saying: look, here it is—this thing we share, this pulse of being alive and trying to understand what that means.
+              My artistic research explores these ideas within West African cultures, particularly those 
+              connected to the Niger River. I look into how our traditions help us find what to hold onto, not just 
+              to keep our rich history alive, but also to start new conversations about being strong and knowing 
+              who we are today.
               </p>
             </div>
           </CardContent>

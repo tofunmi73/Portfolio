@@ -30,119 +30,74 @@ export function HeroSection() {
 
     const canvas = canvasRef.current
     if (!canvas) return
-
-    const ctx = canvas.getContext("2d")
+    let ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
-    const particles: Array<{
+    let animationFrame: number
+    let ripples: Array<{
       x: number
       y: number
       radius: number
-      color: string
-      velocity: { x: number; y: number }
+      maxRadius: number
       opacity: number
-      pulse: number
+      speed: number
     }> = []
 
-    const colors =
-      theme === "dark"
-        ? ["#93c5fd", "#c4b5fd", "#fbcfe8", "#fdba74", "#86efac", "#fca5a5"]
-        : ["#3b82f6", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981", "#ef4444"]
-
-    for (let i = 0; i < 80; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 4 + 1,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        velocity: {
-          x: (Math.random() - 0.5) * 0.8,
-          y: (Math.random() - 0.5) * 0.8,
-        },
-        opacity: Math.random() * 0.6 + 0.2,
-        pulse: Math.random() * Math.PI * 2,
+    // Fill the background with ripples at random intervals
+    function spawnRipple() {
+      if (!canvas) return
+      const x = Math.random() * canvas.width
+      const y = Math.random() * canvas.height
+      const maxRadius = Math.random() * 220 + 180 // Increased size
+      const speed = Math.random() * 1.2 + 0.6 // Slightly faster
+      ripples.push({
+        x,
+        y,
+        radius: 0,
+        maxRadius,
+        opacity: 0.22 + Math.random() * 0.18,
+        speed,
       })
     }
-
-    let animationFrame: number
 
     function animate() {
       if (!ctx || !canvas) return
-
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-      particles.forEach((particle, index) => {
-        particle.x += particle.velocity.x
-        particle.y += particle.velocity.y
-
-        if (particle.x < 0 || particle.x > canvas.width) particle.velocity.x *= -1
-        if (particle.y < 0 || particle.y > canvas.height) particle.velocity.y *= -1
-
-        const dx = mousePosition.x - particle.x
-        const dy = mousePosition.y - particle.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-
-        if (distance < 100) {
-          const force = (100 - distance) / 100
-          particle.velocity.x += (dx / distance) * force * 0.01
-          particle.velocity.y += (dy / distance) * force * 0.01
-        }
-
-        particle.pulse += 0.02
-        const pulseRadius = particle.radius + Math.sin(particle.pulse) * 0.5
-
+      // Draw and update ripples
+      ripples.forEach((ripple, i) => {
+        if (!ctx) return
         ctx.beginPath()
-        ctx.arc(particle.x, particle.y, pulseRadius, 0, Math.PI * 2)
-
-        const gradient = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, pulseRadius)
-        gradient.addColorStop(
-          0,
-          particle.color +
-            Math.floor(particle.opacity * 255)
-              .toString(16)
-              .padStart(2, "0"),
-        )
-        gradient.addColorStop(1, particle.color + "00")
-
-        ctx.fillStyle = gradient
-        ctx.fill()
-
-        particles.slice(index + 1).forEach((otherParticle) => {
-          const dx = particle.x - otherParticle.x
-          const dy = particle.y - otherParticle.y
-          const distance = Math.sqrt(dx * dx + dy * dy)
-
-          if (distance < 120) {
-            ctx.beginPath()
-            ctx.moveTo(particle.x, particle.y)
-            ctx.lineTo(otherParticle.x, otherParticle.y)
-            const connectionOpacity = theme === "dark" ? 0.15 : 0.1
-            ctx.strokeStyle = `rgba(255, 255, 255, ${connectionOpacity * (1 - distance / 120)})`
-            ctx.lineWidth = 1
-            ctx.stroke()
-          }
-        })
+        ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2)
+        ctx.strokeStyle = `rgba(${theme === "dark" ? "96,165,250" : "37,99,235"},${ripple.opacity})`
+        ctx.lineWidth = 2 + (ripple.maxRadius - ripple.radius) * 0.03
+        ctx.stroke()
+        ripple.radius += ripple.speed
+        ripple.opacity *= 0.985
       })
-
+      // Remove faded/finished ripples
+      ripples = ripples.filter(r => r.radius < r.maxRadius && r.opacity > 0.02)
+      // Increase spawn rate for higher density
+      for (let i = 0; i < 3; i++) {
+        if (Math.random() < 0.25) spawnRipple()
+      }
       animationFrame = requestAnimationFrame(animate)
     }
 
-    animate()
-
-    const handleResize = () => {
+    // Responsive canvas
+    function resize() {
+      if (!canvas) return
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+      ctx = canvas.getContext("2d")
     }
-
-    window.addEventListener("resize", handleResize)
+    resize()
+    window.addEventListener("resize", resize)
+    animate()
     return () => {
-      window.removeEventListener("resize", handleResize)
+      window.removeEventListener("resize", resize)
       cancelAnimationFrame(animationFrame)
     }
-  }, [mousePosition, theme, mounted])
+  }, [theme, mounted])
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -173,7 +128,8 @@ export function HeroSection() {
           </h1>
 
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-2xl mx-auto animate-fade-in-up-delayed">
-          My paintings explore the distorted reflections we see in rippled water--where reality bends and reveals new truths
+          Painting the enduring anchors that steady us,
+          tracing their ripples across West African history
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up-delayed-2">

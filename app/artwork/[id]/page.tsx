@@ -22,6 +22,7 @@ interface Artwork {
   inspiration?: string
   technique?: string
   tags: string[]
+  description?: string
 }
 
 export default function ArtworkPage({ params }: { params: { id: string } }) {
@@ -206,6 +207,13 @@ export default function ArtworkPage({ params }: { params: { id: string } }) {
             <div>
               <Badge className="mb-4">{artwork.series}</Badge>
               <h1 className="text-4xl font-bold mb-4">{artwork.title}</h1>
+
+              {artwork.description && (
+                <div className="mb-6">
+                  <h2 className="text-xl font-semibold mb-2">Description</h2>
+                  <p className="text-foreground leading-relaxed">{artwork.description}</p>
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground mb-6">
                 <div>
