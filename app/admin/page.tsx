@@ -212,7 +212,14 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (isLoggedIn && adminUser) {
-      fetchAllData()
+      fetchArtworks(artworksPage, artworksLimit)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [artworksPage, artworksLimit, isLoggedIn, adminUser])
+
+  useEffect(() => {
+    if (isLoggedIn && adminUser) {
+      fetchBlogPosts()
       // Set author name for blog posts
       setBlogForm((prev) => ({ ...prev, author: adminUser.name }))
     }

@@ -81,6 +81,15 @@ export function FeaturedWorks() {
     fetchFeaturedWorks()
   }, [])
 
+  // Auto-advance featured artwork every 3 seconds
+  useEffect(() => {
+    if (featuredWorks.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % featuredWorks.length)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [featuredWorks])
+
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % featuredWorks.length)
   }
@@ -128,26 +137,29 @@ export function FeaturedWorks() {
         </div>
 
         <div className="relative">
-          <Card className="overflow-hidden shadow-2xl">
-            <div className="grid md:grid-cols-2 gap-0">
-              <div className="relative aspect-[4/3] md:aspect-auto">
+          <Card className="overflow-hidden shadow-2xl" style={{ width: 1068, height: 520, maxWidth: '100%' }}>
+            <div className="grid md:grid-cols-2 gap-0 h-full">
+              <div className="relative flex items-center justify-center bg-black/5" style={{ minHeight: 520, minWidth: 534, maxWidth: 534, maxHeight: 520 }}>
                 <Image
                   src={currentWork.image || "/placeholder.svg"}
                   alt={currentWork.title}
-                  fill
-                  className="object-cover"
+                  width={534}
+                  height={520}
+                  className="object-cover rounded-lg"
+                  style={{ width: 534, height: 520 }}
+                  priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
               </div>
 
-              <CardContent className="p-8 flex flex-col justify-center">
+              <CardContent className="p-8 flex flex-col justify-center h-full overflow-hidden">
                 <Badge className="w-fit mb-4 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
                   {currentWork.series}
                 </Badge>
 
-                <h3 className="text-3xl font-bold mb-4">{currentWork.title}</h3>
+                <h3 className="text-3xl font-bold mb-4 truncate" title={currentWork.title}>{currentWork.title}</h3>
 
-                <p className="text-muted-foreground mb-6 leading-relaxed">{currentWork.description}</p>
+                <p className="text-muted-foreground mb-6 leading-relaxed overflow-auto max-h-52">{currentWork.description}</p>
 
                 <div className="space-y-2 mb-6 text-sm text-muted-foreground">
                   <p>

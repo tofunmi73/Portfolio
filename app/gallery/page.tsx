@@ -29,7 +29,8 @@ export default function GalleryPage() {
   const [selectedYear, setSelectedYear] = useState("all")
   const [selectedMedium, setSelectedMedium] = useState("all")
   const [selectedSeries, setSelectedSeries] = useState("all")
-  const [viewMode, setViewMode] = useState<"grid" | "masonry">("masonry")
+  // Remove viewMode state
+  // const [viewMode, setViewMode] = useState<"grid" | "masonry">("masonry")
   const [page, setPage] = useState(1)
   const [limit] = useState(12)
   const [total, setTotal] = useState(0)
@@ -196,7 +197,8 @@ export default function GalleryPage() {
                 </SelectContent>
               </Select>
 
-              <div className="flex gap-2">
+              {/* Remove the view mode toggle buttons and always use grid layout */}
+              {/* <div className="flex gap-2">
                 <Button
                   variant={viewMode === "masonry" ? "default" : "outline"}
                   size="icon"
@@ -211,7 +213,7 @@ export default function GalleryPage() {
                 >
                   <List className="h-4 w-4" />
                 </Button>
-              </div>
+              </div> */}
             </div>
           </CardContent>
         </Card>
@@ -223,13 +225,11 @@ export default function GalleryPage() {
         </div>
 
         <div
-          className={viewMode === "masonry" ? "masonry-grid" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {filteredArtworks.map((artwork) => (
             <Link key={artwork._id || artwork.id} href={`/artwork/${artwork._id || artwork.id}`}>
-              <Card
-                className={`group cursor-pointer hover:shadow-lg transition-all duration-300 ${viewMode === "masonry" ? "masonry-item" : ""}`}
-              >
+              <Card className="group cursor-pointer hover:shadow-lg transition-all duration-300">
                 <div className="relative overflow-hidden">
                   <Image
                     src={artwork.image || "/placeholder.svg"}
@@ -240,7 +240,6 @@ export default function GalleryPage() {
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                 </div>
-
                 <CardContent className="p-4">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
@@ -250,10 +249,8 @@ export default function GalleryPage() {
                       {artwork.year}
                     </Badge>
                   </div>
-
                   <p className="text-sm text-muted-foreground mb-2">{artwork.medium}</p>
                   <p className="text-sm text-muted-foreground mb-3">{artwork.series}</p>
-
                   <div className="flex flex-wrap gap-1">
                     {artwork.tags.slice(0, 3).map((tag) => (
                       <Badge key={tag} variant="outline" className="text-xs">
