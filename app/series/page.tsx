@@ -18,6 +18,8 @@ interface Series {
   coverImage: string
   images: string[]
   featured: boolean
+  createdAt?: string
+  updatedAt?: string
 }
 
 export default function SeriesPage() {
@@ -124,7 +126,13 @@ export default function SeriesPage() {
     fetchSeries()
   }, [])
 
-  const featuredSeries = seriesData.find((series) => series.featured)
+  // Sort seriesData from most recent to least recent by updatedAt, then createdAt, then year
+  const sortedSeriesData = [...seriesData].sort((a, b) => {
+    const dateA = new Date(b.updatedAt || b.createdAt || b.year).getTime();
+    const dateB = new Date(a.updatedAt || a.createdAt || a.year).getTime();
+    return dateA - dateB;
+  });
+  const featuredSeries = sortedSeriesData.find((series) => series.featured)
 
   if (loading) {
     return (
@@ -205,7 +213,7 @@ export default function SeriesPage() {
         )}
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {seriesData
+          {sortedSeriesData
             .filter((series) => !series.featured)
             .map((series) => (
               <Link key={series._id} href={`/series/${series._id}`}>
