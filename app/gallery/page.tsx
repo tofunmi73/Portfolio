@@ -30,6 +30,9 @@ export default function GalleryPage() {
   const [selectedMedium, setSelectedMedium] = useState("all")
   const [selectedSeries, setSelectedSeries] = useState("all")
   const [viewMode, setViewMode] = useState<"grid" | "masonry">("masonry")
+  const [page, setPage] = useState(1)
+  const [limit] = useState(12)
+  const [total, setTotal] = useState(0)
 
   // Mock data fallback
   const mockArtworks: Artwork[] = [
@@ -67,24 +70,37 @@ export default function GalleryPage() {
 
   useEffect(() => {
     const fetchArtworks = async () => {
+      setLoading(true)
       try {
-        const response = await fetch("/api/artworks")
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+        })
+        if (selectedYear !== "all") params.append("year", selectedYear)
+        if (selectedMedium !== "all") params.append("medium", selectedMedium)
+        if (selectedSeries !== "all") params.append("series", selectedSeries)
+        if (searchTerm) params.append("search", searchTerm)
+        const response = await fetch(`/api/artworks?${params.toString()}`)
         if (response.ok) {
           const data = await response.json()
           setArtworks(data.data || mockArtworks)
+          setTotal(data.total || 0)
         } else {
           setArtworks(mockArtworks)
+          setTotal(mockArtworks.length)
         }
       } catch (error) {
         console.error("Error fetching artworks:", error)
         setArtworks(mockArtworks)
+        setTotal(mockArtworks.length)
       } finally {
         setLoading(false)
       }
     }
 
     fetchArtworks()
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, limit, selectedYear, selectedMedium, selectedSeries, searchTerm])
 
   const uniqueYears = [...new Set(artworks.map(artwork => artwork.year))].sort((a, b) => b - a)
   const uniqueMediums = [...new Set(artworks.map(artwork => artwork.medium.toLowerCase()))]
@@ -117,6 +133,9 @@ export default function GalleryPage() {
       </div>
     )
   }
+
+  // Pagination controls
+  const totalPages = Math.ceil(total / limit)
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -199,7 +218,7 @@ export default function GalleryPage() {
 
         <div className="mb-4">
           <p className="text-muted-foreground">
-            Showing {filteredArtworks.length} of {artworks.length} artworks
+            Showing {artworks.length} of {total} artworks
           </p>
         </div>
 
@@ -247,6 +266,38 @@ export default function GalleryPage() {
             </Link>
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2 mt-8">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+            >
+              Previous
+            </Button>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <Button
+                key={i + 1}
+                variant={page === i + 1 ? "default" : "outline"}
+                size="sm"
+                onClick={() => setPage(i + 1)}
+              >
+                {i + 1}
+              </Button>
+            ))}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+            >
+              Next
+            </Button>
+          </div>
+        )}
 
         {filteredArtworks.length === 0 && (
           <div className="text-center py-12">

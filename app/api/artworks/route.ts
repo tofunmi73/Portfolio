@@ -11,17 +11,30 @@ export async function GET(request: NextRequest) {
     const medium = searchParams.get("medium")
     const series = searchParams.get("series")
     const search = searchParams.get("search")
+    const page = parseInt(searchParams.get("page") || "1", 10)
+    const limit = parseInt(searchParams.get("limit") || "12", 10)
+    const skip = (page - 1) * limit
 
     if (year && year !== "all") query.year = Number.parseInt(year)
     if (medium && medium !== "all") query.medium = medium
     if (series && series !== "all") query.series = series
     if (search) {
-      query.$or = [{ title: { $regex: search, $options: "i" } }, { tags: { $in: [new RegExp(search, "i")] } }]
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { tags: { $in: [new RegExp(search, "i")] } }
+      ]
     }
 
-    const artworks = await db.collection("artworks").find(query).sort({ createdAt: -1 }).toArray()
+    const total = await db.collection("artworks").countDocuments(query)
+    const artworks = await db
+      .collection("artworks")
+      .find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray()
 
-    return NextResponse.json({ success: true, data: artworks })
+    return NextResponse.json({ success: true, data: artworks, total })
   } catch (error) {
     console.error("Error fetching artworks:", error)
     return NextResponse.json({ success: false, error: "Failed to fetch artworks" }, { status: 500 })
