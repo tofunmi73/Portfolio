@@ -121,6 +121,10 @@ export default function AdminPage() {
     tags: [],
   })
   const [editingArtwork, setEditingArtwork] = useState<string | null>(null)
+  // Pagination state for artworks
+  const [artworksPage, setArtworksPage] = useState(1)
+  const [artworksLimit, setArtworksLimit] = useState(12)
+  const [artworksTotal, setArtworksTotal] = useState(0)
 
   // Blog posts state
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
@@ -229,7 +233,7 @@ export default function AdminPage() {
 
   const fetchAllData = async () => {
     await Promise.all([
-      fetchArtworks(),
+      fetchArtworks(artworksPage, artworksLimit),
       fetchBlogPosts(),
       fetchExhibitions(),
       fetchStats(),
@@ -240,12 +244,13 @@ export default function AdminPage() {
     ])
   }
 
-  const fetchArtworks = async () => {
+  const fetchArtworks = async (page = artworksPage, limit = artworksLimit) => {
     try {
-      const response = await fetch("/api/artworks")
+      const response = await fetch(`/api/artworks?page=${page}&limit=${limit}`)
       if (response.ok) {
         const data = await response.json()
         setArtworks(data.data || [])
+        setArtworksTotal(data.total || 0)
       }
     } catch (error) {
       console.error("Error fetching artworks:", error)
@@ -1083,7 +1088,7 @@ export default function AdminPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Existing Artworks ({artworks.length})</CardTitle>
+                <CardTitle>Existing Artworks ({artworksTotal})</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -1110,6 +1115,28 @@ export default function AdminPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+                {/* Pagination Controls */}
+                <div className="flex justify-between items-center mt-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={artworksPage === 1}
+                    onClick={() => setArtworksPage((prev) => Math.max(1, prev - 1))}
+                  >
+                    Previous
+                  </Button>
+                  <span>
+                    Page {artworksPage} of {Math.ceil(artworksTotal / artworksLimit) || 1}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={artworksPage >= Math.ceil(artworksTotal / artworksLimit)}
+                    onClick={() => setArtworksPage((prev) => prev + 1)}
+                  >
+                    Next
+                  </Button>
                 </div>
               </CardContent>
             </Card>
