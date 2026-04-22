@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm off-white editorial palette */
+    --background: 38 22% 96%;
+    --foreground: 20 14% 9%;
+    --card: 38 22% 98%;
+    --card-foreground: 20 14% 9%;
+    --popover: 38 22% 98%;
+    --popover-foreground: 20 14% 9%;
+    --primary: 20 14% 9%;
+    --primary-foreground: 38 22% 96%;
+    --secondary: 35 18% 91%;
+    --secondary-foreground: 20 14% 20%;
+    --muted: 35 15% 93%;
+    --muted-foreground: 20 10% 47%;
+    --accent: 22 58% 44%;
+    --accent-foreground: 38 22% 96%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 38 22% 96%;
+    --border: 35 15% 87%;
+    --input: 35 15% 87%;
+    --ring: 22 58% 44%;
+    --radius: 0.25rem;
+  }
+
+  .dark {
+    --background: 20 14% 6%;
+    --foreground: 38 22% 93%;
+    --card: 20 14% 9%;
+    --card-foreground: 38 22% 93%;
+    --popover: 20 14% 9%;
+    --popover-foreground: 38 22% 93%;
+    --primary: 38 22% 93%;
+    --primary-foreground: 20 14% 6%;
+    --secondary: 20 10% 15%;
+    --secondary-foreground: 38 22% 80%;
+    --muted: 20 10% 15%;
+    --muted-foreground: 20 10% 55%;
+    --accent: 22 55% 52%;
+    --accent-foreground: 38 22% 95%;
+    --destructive: 0 63% 40%;
+    --destructive-foreground: 38 22% 95%;
+    --border: 20 10% 18%;
+    --input: 20 10% 18%;
+    --ring: 22 55% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+.masonry-grid {
+  column-count: 1;
+  column-gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1280px) {
+  .masonry-grid {
+    column-count: 4;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+}
