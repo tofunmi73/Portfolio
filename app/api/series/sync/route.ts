@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
         console.error(`Error updating series "${series.title}":`, error)
         return {
           seriesTitle: series.title,
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
           updated: false
         }
       }
