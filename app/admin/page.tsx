@@ -904,7 +904,7 @@ export default function AdminPage() {
     }
   }
 
-  const updateSeriesCollection = async (artworkData) => {
+  const updateSeriesCollection = async (artworkData: Artwork) => {
     if (!artworkData.series || artworkData.series.toLowerCase() === 'n/a') {
       return // Don't create series for N/A
     }
